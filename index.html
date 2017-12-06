@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>The Pyschic Game</title>
+  </head>
+  <body>
+
+    <h1>The Pyschic Game!</h1>
+
+    <p>Guess What I am Thinking of...</p>
+    <p id="wins"></p>
+    <p id="losses"></p>
+    <p id="guesses-left"></p>
+    <p id="letters-used"></p>
+
+    <script>
+
+      // VARIABLES
+      // ==========================================================================
+
+      // We start the game with a score of 0.
+      var wins = 0;
+      var losses = 0;
+      var guessleft = 9;
+      var letters = "";
+
+      function makeRandomLetter() {
+        var text = "";
+        var possible = "abcdefghijklmnopqrstuvwxyz";
+
+        for (var i = 0; i < 1; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+      }
+
+      var random_letter = makeRandomLetter();
+
+      // FUNCTIONS
+      // ==============================================================================
+
+      // Function that updates the wins...
+      function updateWin() {
+        document.querySelector("#wins").innerHTML = "Wins: " + wins;
+      }
+
+       // Function that updates the losses...
+      function updateLoss() {
+        document.querySelector("#losses").innerHTML = "Losses: " + losses;
+      }
+
+      //function that updates guesses left
+      function updateGuessCount() {
+        document.querySelector("#guesses-left").innerHTML = "Guesses Left: " + guessleft;
+      }
+
+      //function that updates the letters used
+      function updateGuess() {
+        document.querySelector("#letters-used").innerHTML = "Letters used: " + letters;
+      }
+
+      //function that updates the random letter to be guess
+      function updateRandLetter(){
+        random_letter = makeRandomLetter();
+        return random_letter;
+      }
+
+      //functions to reset when there is a win or loss
+      function gameResetWin(){
+        wins ++;
+        guessleft = 9;
+        letters = "";
+      }
+
+      function gameResetloss(){
+        losses ++;
+        guessleft = 10;
+        letters = "";
+      }
+
+      // MAIN PROCESS
+      // ==============================================================================
+
+      // Calling functions to start the game.
+      updateLoss();
+      updateWin();
+      updateGuessCount();
+      updateGuess();
+
+      // When the user presses a key, it will run the following function...
+      document.onkeyup = function(event) {
+
+        // If there are no more guesses, stop the function, resets the parameters.
+        if (guessleft == 1) {
+          gameResetloss();
+          updateLoss();
+          return;
+        }
+
+        // Determine which key was pressed, make it lowercase, and set it to the userInput variable.
+        var userInput = String.fromCharCode(event.keyCode).toLowerCase();
+
+        //if userInput equals the letter, update wins and update random letter
+        if(userInput === random_letter){
+          gameResetWin();
+          updateWin();
+          updateRandLetter();
+        }
+
+        //user guess was wrong
+        if (userInput != random_letter) {
+          letters = userInput + " " + letters;
+          guessleft--;
+          updateGuessCount();
+          updateGuess();
+        }
+      };
+
+    </script>
+    
+  </body>
+</html>
